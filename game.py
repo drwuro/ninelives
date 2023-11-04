@@ -47,7 +47,7 @@ class Game:
         self.running = False
         self.font = BitmapFont('gfx/heimatfont.png')
 
-        self.player = Object('cat', 10, 5)
+        self.player = Object('cat')
 
     def initVideo(self):
         flags = pygame.SCALED
@@ -60,6 +60,18 @@ class Game:
             lines = f.readlines()
 
         self.level = lines
+
+        # find player start pos
+
+        for y, line in enumerate(self.level):
+            for x, tile in enumerate(line):
+                if tile == 'c':
+                    self.setTile(x, y, ' ')
+                    self.player.xpos = x
+                    self.player.ypos = y
+
+    def setTile(self, x, y, tile):
+        self.level[y] = self.level[y][:x] + tile + self.level[y][x+1:]
 
     ###
 
