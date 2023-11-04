@@ -116,7 +116,7 @@ class Game:
         self.player = Object('cat')
 
         # editmode
-        self.editcursor = Object('cursor')
+        self.cursor = Object('cursor')
 
     def initVideo(self):
         flags = pygame.SCALED
@@ -285,7 +285,8 @@ class Game:
 
 
         #editmode
-    def editmode(self):
+    def editing(self):
+        pass
         
 
 
