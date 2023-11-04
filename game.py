@@ -321,11 +321,11 @@ class Game:
                     else:
                         if e.unicode.isnumeric():
                             self.loadLevel(int(e.unicode))
-                            self.levelselect = int(e.unicode)
+                            self.levelno = int(e.unicode)
                         else:
                             if e.unicode == "s":
-                                self.saveLevel(self.levelselect)
-
+                                self.saveLevel(self.levelno)
+                                
 
 
 
@@ -514,9 +514,8 @@ class Game:
 
         # show editmode
         if self.editmode:
-            self.font.drawText(self.screen, 'EDIT MODE ', x=1, y=21)
-            self.font.drawText(self.screen, 'LEVEL ' + str(self.levelno), x=12, y=21)
-            self.font.drawText(self.screen, ' — L.OAD, S.AVE', x=21, y=21)
+            self.font.drawText(self.screen, 'EDIT MODE --- LEVEL ' + str(self.levelno), x=1, y=21)
+            # self.font.drawText(self.screen, '' + str(self.levelno), x=12, y=21)
             self.cursor.render(self.screen)
 
 
