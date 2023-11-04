@@ -36,6 +36,7 @@ TILES = {'#': pygame.image.load('gfx/wall.png'),
          'b': pygame.image.load('gfx/box.png'),
 
          'cat': pygame.image.load('gfx/cat.png'),
+         'dummy': pygame.image.load('gfx/dummy.png'),
          }
 
 OBSTACLES = ['#', '+']
@@ -259,6 +260,8 @@ class Game:
 
                 if tile in TILES:
                     self.screen.blit(TILES[tile], (x * TW, y * TH))
+                else:
+                    self.screen.blit(TILES['dummy'], (x * TW, y * TH))
 
         # draw cat
         self.player.render(self.screen)
