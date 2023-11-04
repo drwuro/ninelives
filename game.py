@@ -42,8 +42,10 @@ TILES = {'#': pygame.image.load('gfx/wall.png'),
          'f': pygame.image.load('gfx/fish_alive.png'),
          'k': pygame.image.load('gfx/candle.png'),
          'kd': pygame.image.load('gfx/candle_d.png'),
-         't': pygame.image.load('gfx/Taschenlampe.png'),
-         'v': pygame.image.load('gfx/Taschenlampe.png'),
+         't': pygame.image.load('gfx/Taschenlampe_t.png'),
+         'v': pygame.image.load('gfx/Taschenlampe_v.png'),
+         'u': pygame.image.load('gfx/Taschenlampe_u.png'),
+         'w': pygame.image.load('gfx/Taschenlampe_w.png'),
          'e': pygame.image.load('gfx/enemy_1.png'),
 
 
