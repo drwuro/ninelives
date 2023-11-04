@@ -152,6 +152,11 @@ class Game:
 
         pygame.display.flip()
 
+        #editmode 
+    def editmode(self):
+        pygame.draw.rect()
+
+
     def run(self):
         self.running = True
 
