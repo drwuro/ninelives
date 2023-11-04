@@ -38,6 +38,10 @@ class Game:
                 if e.key == pygame.K_F11:
                     pygame.display.toggle_fullscreen()
 
+            if e.type == pygame.QUIT:
+                self.running = False
+                return
+
     def update(self):
         pass
 
