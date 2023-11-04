@@ -1,5 +1,6 @@
 import pygame
 import os
+import time
 
 from bitmapfont import BitmapFont
 
@@ -33,11 +34,14 @@ TILES = {'#': pygame.image.load('gfx/wall.png'),
          '+': pygame.image.load('gfx/border.png'),
          ' ': pygame.image.load('gfx/floor.png'),
          'i': pygame.image.load('gfx/floor_i.png'),
+         'id': pygame.image.load('gfx/floor_id.png'),
          'j': pygame.image.load('gfx/floor_j.png'),
+         'jd': pygame.image.load('gfx/floor_jd.png'),
          'b': pygame.image.load('gfx/box.png'),
          'g': pygame.image.load('gfx/fish_dead.png'),
          'f': pygame.image.load('gfx/fish_alive.png'),
          'k': pygame.image.load('gfx/candle.png'),
+         'kd': pygame.image.load('gfx/candle_d.png'),
          't': pygame.image.load('gfx/Taschenlampe.png'),
          'v': pygame.image.load('gfx/Taschenlampe.png'),
          'e': pygame.image.load('gfx/enemy_1.png'),
@@ -340,16 +344,24 @@ class Game:
     def render(self):
         self.screen.fill((0, 0, 0))
 
+        flicker = (time.time() * 1000) % 600 < 250
+
         for y, line in enumerate(self.level):
             for x, tile in enumerate(line):
 
                 # draw floor / lighting
                 floortile = self.getFloor(x, y)
+                if  floortile != ' ' and flicker:
+                    floortile += 'd'
                 self.screen.blit(TILES[floortile], (x * TW, y * TH))
 
                 # draw actual tile
                 if tile in TILES:
                     if tile != ' ':
+                        if tile == 'k':
+                            if flicker:
+                                tile += 'd'
+
                         self.screen.blit(TILES[tile], (x * TW, y * TH))
                 else:
                     self.screen.blit(TILES['dummy'], (x * TW, y * TH))
