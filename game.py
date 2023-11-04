@@ -286,7 +286,7 @@ class Game:
 
         #editmode
     def editmode(self):
-        pygame.draw.rect()
+        
 
 
     def run(self):
