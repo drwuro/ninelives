@@ -42,8 +42,10 @@ TILES = {'#': pygame.image.load('gfx/wall.png'),
          'f': pygame.image.load('gfx/fish_alive.png'),
          'k': pygame.image.load('gfx/candle.png'),
          'kd': pygame.image.load('gfx/candle_d.png'),
-         't': pygame.image.load('gfx/Taschenlampe.png'),
-         'v': pygame.image.load('gfx/Taschenlampe.png'),
+         't': pygame.image.load('gfx/Taschenlampe_t.png'),
+         'v': pygame.image.load('gfx/Taschenlampe_v.png'),
+         'u': pygame.image.load('gfx/Taschenlampe_u.png'),
+         'w': pygame.image.load('gfx/Taschenlampe_w.png'),
          'e': pygame.image.load('gfx/enemy_1.png'),
 
 
@@ -263,7 +265,7 @@ class Game:
                     pygame.display.toggle_fullscreen()
 
                 if self.editmode:
-                    if e.unicode in TILES:
+                    if e.unicode in TILES and e.unicode != ("i") and e.unicode != ("j"):
                         if e.unicode != self.getTile(self.cursor.xpos, self.cursor.ypos):
                             self.setTile(self.cursor.xpos, self.cursor.ypos, e.unicode)
                         else:
