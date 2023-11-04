@@ -163,10 +163,10 @@ class Game:
     def saveLevel(self, number):
         filename = 'lev/level%i' % number
 
-        with open(filename) as f:
-            lines = f.
+#        with open(filename) as f:
+#            lines = f.
 
-        self.level = lines
+#        self.level = lines
 
         # find player start pos
 
