@@ -14,6 +14,7 @@ os.environ['SDL_VIDEO_WINDOW_POS'] = "-1,-1"
 TILES = {'#': pygame.image.load('gfx/wall.png'),
          '+': pygame.image.load('gfx/border.png'),
          ' ': pygame.image.load('gfx/floor.png'),
+         'b': pygame.image.load('gfx/box.png'),
 
          'cat': pygame.image.load('gfx/cat.png'),
          }
