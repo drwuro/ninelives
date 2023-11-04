@@ -57,6 +57,7 @@ TILES = {'#': pygame.image.load('gfx/wall.png'),
 
          'cat': pygame.image.load('gfx/cat.png'),
          'cat_ghost': pygame.image.load('gfx/cat_g.png'),
+         'cat_ghost2': pygame.image.load('gfx/cat_g2.png'),
          'cursor': pygame.image.load('gfx/cursor.png'),
          'dummy': pygame.image.load('gfx/dummy.png'),
          }
@@ -315,7 +316,7 @@ class Game:
                         else:
                             if e.unicode == "s":
                                 self.saveLevel(self.levelselect)
-                                
+
 
 
 
@@ -476,7 +477,12 @@ class Game:
         # draw cat
         self.player.render(self.screen)
 
-        TILES['cat_ghost'].set_alpha(64 + (time.time() * 100) % 128)
+        if self.ghostmode:
+            if flicker:
+                self.player.sprite_id = 'cat_ghost'
+            else:
+                self.player.sprite_id = 'cat_ghost2'
+
 
         #self.font.centerText(self.screen, 'CATS HAVE NINE LIVES', y=5)
         #self.font.centerText(self.screen, 'F11 or ALT+ENTER = FULLSCREEN', y=7)
