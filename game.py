@@ -10,6 +10,23 @@ pygame.init()
 
 os.environ['SDL_VIDEO_WINDOW_POS'] = "-1,-1"
 
+#       TILE repository:
+#       +   "stahlwand"
+#       #   wand
+#           bodenfliese
+#       b   box
+#       k   kerze
+#       t   taschenlampe TOP
+#         u taschenlampe RIGHT
+#         v taschenlampe DOWN
+#         w taschenlampe LEFT
+#       i   beleuchtet
+#         j halb beleuchtet
+#       f   fisch
+#       g   "gestorbener" fisch
+#       e   enemy (starting position)
+#       c   cat (starting position)
+
 
 TILES = {'#': pygame.image.load('gfx/wall.png'),
          '+': pygame.image.load('gfx/border.png'),
