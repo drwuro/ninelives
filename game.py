@@ -234,7 +234,7 @@ class Game:
                     pygame.display.toggle_fullscreen()
 
                 if self.editmode:
-                    if e.unicode in TILES:
+                    if e.unicode in TILES and e.unicode != ("i") and e.unicode != ("j"):
                         if e.unicode != self.getTile(self.cursor.xpos, self.cursor.ypos):
                             self.setTile(self.cursor.xpos, self.cursor.ypos, e.unicode)
                         else:
