@@ -18,6 +18,8 @@ TILES = {'#': pygame.image.load('gfx/wall.png'),
          'cat': pygame.image.load('gfx/cat.png'),
          }
 
+OBSTACLES = ['#']
+
 
 class Object:
     def __init__(self, sprite_id, xpos=1, ypos=1):
@@ -79,6 +81,11 @@ class Game:
     ###
 
     def controls(self):
+        tileLeft = self.getTile(self.player.xpos -1, self.player.ypos)
+        tileRight = self.getTile(self.player.xpos +1, self.player.ypos)
+        tileUp = self.getTile(self.player.xpos, self.player.ypos -1)
+        tileDown = self.getTile(self.player.xpos, self.player.ypos +1)
+
         while True:
             e = pygame.event.poll()
 
@@ -96,16 +103,20 @@ class Game:
 
 
                 if e.key == pygame.K_LEFT:
-                    self.player.moveLeft()
+                    if tileLeft not in OBSTACLES:
+                        self.player.moveLeft()
 
                 if e.key == pygame.K_RIGHT:
-                    self.player.moveRight()
+                    if tileRight not in OBSTACLES:
+                        self.player.moveRight()
 
                 if e.key == pygame.K_UP:
-                    self.player.moveUp()
+                    if tileUp not in OBSTACLES:
+                        self.player.moveUp()
 
                 if e.key == pygame.K_DOWN:
-                    self.player.moveDown()
+                    if tileDown not in OBSTACLES:
+                        self.player.moveDown()
 
             if e.type == pygame.QUIT:
                 self.running = False
