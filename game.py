@@ -31,6 +31,8 @@ pygame.init()
 TILES = {'#': pygame.image.load('gfx/wall.png'),
          '+': pygame.image.load('gfx/border.png'),
          ' ': pygame.image.load('gfx/floor.png'),
+         'i': pygame.image.load('gfx/floor_i.png'),
+         'j': pygame.image.load('gfx/floor_J.png'),
          'b': pygame.image.load('gfx/box.png'),
 
          'cat': pygame.image.load('gfx/cat.png'),
