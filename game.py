@@ -44,10 +44,14 @@ TILES = {'#': pygame.image.load('gfx/wall.png'),
          'f': pygame.image.load('gfx/fish_alive.png'),
          'k': pygame.image.load('gfx/candle.png'),
          'kd': pygame.image.load('gfx/candle_d.png'),
-         't': pygame.image.load('gfx/Taschenlampe_t.png'),
-         'v': pygame.image.load('gfx/Taschenlampe_v.png'),
-         'u': pygame.image.load('gfx/Taschenlampe_u.png'),
-         'w': pygame.image.load('gfx/Taschenlampe_w.png'),
+         't': pygame.image.load('gfx/Taschenlampe_t1.png'),
+         'v': pygame.image.load('gfx/Taschenlampe_v1.png'),
+         'u': pygame.image.load('gfx/Taschenlampe_u1.png'),
+         'w': pygame.image.load('gfx/Taschenlampe_w1.png'),
+         't2': pygame.image.load('gfx/Taschenlampe_t2.png'),
+         'v2': pygame.image.load('gfx/Taschenlampe_v2.png'),
+         'u2': pygame.image.load('gfx/Taschenlampe_u2.png'),
+         'w2': pygame.image.load('gfx/Taschenlampe_w2.png'),
          'e': pygame.image.load('gfx/enemy_1.png'),
 
 
@@ -445,6 +449,10 @@ class Game:
 
                             if anim == 1 or anim == 3:
                                 tile += str(anim)
+
+                        elif tile in ['t', 'u', 'v', 'w']:
+                            if not flicker:
+                                tile += '2'
 
                         self.screen.blit(TILES[tile], (x * TW, y * TH))
                 else:
