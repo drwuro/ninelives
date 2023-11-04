@@ -193,7 +193,7 @@ class Game:
             if intensity == 0:
                 return
 
-            if self.getFloor(x, y) == ' ':
+            if INTENSITY.index(self.getFloor(x, y)) < intensity:
                 self.setFloor(x, y, INTENSITY[intensity])
 
             coordlist = [(-1, 0), (1, 0), (0, -1), (0, 1)]
