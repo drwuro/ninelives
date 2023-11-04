@@ -91,10 +91,11 @@ class Object:
             self.ydir = 0
 
     def update(self):
+        if self.xdir != 0 or self.ydir != 0:
+            self.movedelay = 8
+
         self.xpos += self.xdir
         self.ypos += self.ydir
-
-        self.movedelay = 8
 
     def mayMove(self):
         self.movedelay -= 1
@@ -116,7 +117,7 @@ class Game:
         self.player = Object('cat')
 
         # editmode
-        self.editcursor = Object('cursor')
+        self.cursor = Object('cursor')
 
     def initVideo(self):
         flags = pygame.SCALED
@@ -151,6 +152,14 @@ class Game:
     ###
 
     def controls(self):
+
+        if self.editmode:
+            cur_object = self.cursor
+        else:
+            cur_object = self.player
+
+
+
         while True:
             e = pygame.event.poll()
 
@@ -168,16 +177,16 @@ class Game:
 
 
                 if e.key == pygame.K_LEFT:
-                    self.player.moveLeft()
+                    cur_object.moveLeft()
 
                 if e.key == pygame.K_RIGHT:
-                    self.player.moveRight()
+                    cur_object.moveRight()
 
                 if e.key == pygame.K_UP:
-                    self.player.moveUp()
+                    cur_object.moveUp()
 
                 if e.key == pygame.K_DOWN:
-                    self.player.moveDown()
+                    cur_object.moveDown()
 
 
                 if e.key == pygame.K_TAB:
@@ -185,22 +194,28 @@ class Game:
 
             if e.type == pygame.KEYUP:
                 if e.key == pygame.K_LEFT:
-                    self.player.stopLeft()
+                    cur_object.stopLeft()
 
                 if e.key == pygame.K_RIGHT:
-                    self.player.stopRight()
+                    cur_object.stopRight()
 
                 if e.key == pygame.K_UP:
-                    self.player.stopUp()
+                    cur_object.stopUp()
 
                 if e.key == pygame.K_DOWN:
-                    self.player.stopDown()
+                    cur_object.stopDown()
 
             if e.type == pygame.QUIT:
                 self.running = False
                 return
 
     def update(self):
+        # update cursor (editmode)
+
+        if self.cursor.mayMove():
+            self.cursor.update()
+
+
         # update cat
 
         if not self.player.mayMove():
@@ -284,9 +299,6 @@ class Game:
         pygame.display.flip()
 
 
-        #editmode
-    def editmode(self):
-        pygame.draw.rect()
 
 
     def run(self):
