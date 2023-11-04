@@ -13,16 +13,41 @@ os.environ['SDL_VIDEO_WINDOW_POS'] = "0,0"
 
 TILES = {'#': pygame.image.load('gfx/wall.png'),
          '+': pygame.image.load('gfx/border.png'),
+         ' ': pygame.image.load('gfx/floor.png'),
+
+         'cat': pygame.image.load('gfx/cat.png'),
          }
 
 
+class Object:
+    def __init__(self, sprite_id, xpos=1, ypos=1):
+        self.sprite_id = sprite_id
+        self.xpos = xpos
+        self.ypos = ypos
+
+    def render(self, target):
+        target.blit(TILES[self.sprite_id], (self.xpos * TW, self.ypos * TH))
+
+    def moveLeft(self):
+        self.xpos -= 1
+
+    def moveRight(self):
+        self.xpos += 1
+
+    def moveUp(self):
+        self.ypos -= 1
+
+    def moveDown(self):
+        self.ypos += 1
+
 class Game:
     def __init__(self):
-        self.running = False
-
         self.initVideo()
 
+        self.running = False
         self.font = BitmapFont('gfx/heimatfont.png')
+
+        self.player = Object('cat', 10, 5)
 
     def initVideo(self):
         flags = pygame.SCALED
@@ -52,6 +77,19 @@ class Game:
                 if e.key == pygame.K_F11:
                     pygame.display.toggle_fullscreen()
 
+
+                if e.key == pygame.K_LEFT:
+                    self.player.moveLeft()
+
+                if e.key == pygame.K_RIGHT:
+                    self.player.moveRight()
+
+                if e.key == pygame.K_UP:
+                    self.player.moveUp()
+
+                if e.key == pygame.K_DOWN:
+                    self.player.moveDown()
+
             if e.type == pygame.QUIT:
                 self.running = False
                 return
@@ -60,10 +98,15 @@ class Game:
         pass
 
     def render(self):
+        self.screen.fill((0, 0, 0))
+
         for y, line in enumerate(self.level):
             for x, tile in enumerate(line):
                 if tile in TILES:
                     self.screen.blit(TILES[tile], (x * TW, y * TH))
+
+        # draw cat
+        self.player.render(self.screen)
 
         self.font.centerText(self.screen, 'CATS HAVE NINE LIVES', y=5)
         self.font.centerText(self.screen, 'F11 = FULLSCREEN', y=7)
