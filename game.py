@@ -308,6 +308,15 @@ class Game:
                             self.setTile(self.cursor.xpos, self.cursor.ypos, e.unicode)
                         else:
                             self.setTile(self.cursor.xpos, self.cursor.ypos, " ")
+                    else:
+                        if e.unicode.isnumeric():
+                            self.loadLevel(int(e.unicode))
+                            self.levelselect = int(e.unicode)
+                        else:
+                            if e.unicode == "s":
+                                self.saveLevel(self.levelselect)
+                                
+
 
 
                 if e.key == pygame.K_LEFT:
@@ -500,9 +509,9 @@ class Game:
 
 game = Game()
 
-game.loadLevel(2)
+game.loadLevel(1)
 game.run()
 
 pygame.quit()
-game.saveLevel(2)
+game.saveLevel(game.levelno)
 
