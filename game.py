@@ -143,6 +143,7 @@ class Game:
         self.running = False
         self.editmode = False
         self.ghostmode = False
+        self.gameover = False
 
         self.font = BitmapFont('gfx/heimatfont.png')
 
@@ -277,6 +278,14 @@ class Game:
         OBSTACLES = OBSTACLES_AS_GHOST
         PUSHABLES = PUSHABLES_AS_GHOST
 
+    def enterNormalMode(self):
+        self.ghostmode = False
+        self.player.sprite_id = 'cat'
+
+        global OBSTACLES, PUSHABLES
+        OBSTACLES = OBSTACLES_AS_CAT
+        PUSHABLES = PUSHABLES_AS_CAT
+
     ###
 
     def controls(self):
@@ -331,6 +340,14 @@ class Game:
 
                 if e.key == pygame.K_DOWN:
                     cur_object.moveDown()
+
+
+                if e.key == pygame.K_SPACE:
+                    if self.gameover:
+                        self.gameover = False
+                        self.loadLevel(self.levelno)
+
+                        self.enterNormalMode()
 
 
                 if e.key == pygame.K_TAB:
@@ -418,19 +435,23 @@ class Game:
                 else:
                     self.player.update()
 
-
-        cur_tile = self.getTile(self.player.xpos, self.player.ypos)
+        cur_x, cur_y = self.player.xpos, self.player.ypos
+        cur_tile = self.getTile(cur_x, cur_y)
 
         if cur_tile == 'e':
             self.enterGhostMode()
 
         elif cur_tile == 'f':
             if not self.ghostmode:
-                self.setTile(self.player.xpos, self.player.ypos, ' ')
+                self.setTile(cur_x, cur_y, ' ')
 
         elif cur_tile == 'g':
             if self.ghostmode:
-                self.setTile(self.player.xpos, self.player.ypos, ' ')
+                self.setTile(cur_x, cur_y, ' ')
+
+        if self.getFloor(cur_x, cur_y) != ' ':
+            if self.ghostmode:
+                self.gameover = True
 
         self.calcLighting()
 
@@ -484,8 +505,12 @@ class Game:
                 self.player.sprite_id = 'cat_ghost2'
 
 
-        #self.font.centerText(self.screen, 'CATS HAVE NINE LIVES', y=5)
-        #self.font.centerText(self.screen, 'F11 or ALT+ENTER = FULLSCREEN', y=7)
+        # game over
+
+        if self.gameover:
+            self.font.centerText(self.screen, 'GAME OVER', y=10)
+            self.font.centerText(self.screen, 'PRESS SPACE', y=12)
+
 
         # show editmode
         if self.editmode:
