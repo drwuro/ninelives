@@ -49,6 +49,7 @@ TILES = {'#': pygame.image.load('gfx/wall.png'),
 
 OBSTACLES = ['#', '+']
 FLOORS = [' ', 'i', 'j']
+LIGHT_BLOCKERS = ['#', '+', 'b']
 
 
 class Object:
@@ -182,16 +183,24 @@ class Game:
         for y in range(LEV_H):
             for x in range(LEV_W):
                 if self.getTile(x, y) == 'k':
-                    self.setFloor(x, y, 'i')
+                    self.emitLighting(x, y)
 
-                    if self.getTile(x -1, y) == ' ':
-                        self.setFloor(x -1, y, 'i')
-                    if self.getTile(x +1, y) == ' ':
-                        self.setFloor(x +1, y, 'i')
-                    if self.getTile(x, y -1) == ' ':
-                        self.setFloor(x, y -1, 'i')
-                    if self.getTile(x, y +1) == ' ':
-                        self.setFloor(x, y +1, 'i')
+    def emitLighting(self, x, y):
+        INTENSITY = [' ', 'j', 'i', 'i']
+
+        def illuminate(x, y, intensity):
+            if intensity == 0:
+                return
+
+            if self.getFloor(x, y) == ' ':
+                self.setFloor(x, y, INTENSITY[intensity])
+
+            coordlist = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+            for coords in coordlist:
+                if self.getTile(x + coords[0], y + coords[1]) not in LIGHT_BLOCKERS:
+                    illuminate(x + coords[0], y + coords[1], intensity -1)
+
+        illuminate(x, y, 3)
 
     ###
 
