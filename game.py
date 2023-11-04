@@ -53,7 +53,7 @@ TILES = {'#': pygame.image.load('gfx/wall.png'),
          'u2': pygame.image.load('gfx/Taschenlampe_u2.png'),
          'w2': pygame.image.load('gfx/Taschenlampe_w2.png'),
          'e': pygame.image.load('gfx/enemy_1.png'),
-
+         '-': pygame.image.load('gfx/floor_g.png'),
 
          'c': pygame.image.load('gfx/cat.png'),
          'cat': pygame.image.load('gfx/cat.png'),
@@ -433,8 +433,12 @@ class Game:
 
                 # draw floor / lighting
                 floortile = self.getFloor(x, y)
-                if  floortile != ' ' and flicker:
+                if floortile != ' ' and flicker:
                     floortile += 'd'
+
+                if floortile == ' ' and self.ghostmode:
+                    floortile = '-'
+
                 self.screen.blit(TILES[floortile], (x * TW, y * TH))
 
                 # draw actual tile
