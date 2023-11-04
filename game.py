@@ -88,6 +88,8 @@ class Game:
                     return
                 if e.key == pygame.K_F11:
                     pygame.display.toggle_fullscreen()
+                if e.key == pygame.K_RETURN and pygame.key.get_mods() & pygame.KMOD_ALT:
+                    pygame.display.toggle_fullscreen()
 
 
                 if e.key == pygame.K_LEFT:
@@ -121,7 +123,7 @@ class Game:
         self.player.render(self.screen)
 
         self.font.centerText(self.screen, 'CATS HAVE NINE LIVES', y=5)
-        self.font.centerText(self.screen, 'F11 = FULLSCREEN', y=7)
+        self.font.centerText(self.screen, 'F11 or ALT+ENTER = FULLSCREEN', y=7)
 
         pygame.display.flip()
 
