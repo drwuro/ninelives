@@ -8,7 +8,7 @@ TW, TH = 16, 16
 
 pygame.init()
 
-os.environ['SDL_VIDEO_WINDOW_POS'] = "0,0"
+os.environ['SDL_VIDEO_WINDOW_POS'] = "-1,-1"
 
 
 TILES = {'#': pygame.image.load('gfx/wall.png'),
@@ -47,6 +47,7 @@ class Game:
         self.initVideo()
 
         self.running = False
+        self.editmode = False
         self.font = BitmapFont('gfx/heimatfont.png')
 
         self.player = Object('cat')
@@ -118,6 +119,10 @@ class Game:
                     if tileDown not in OBSTACLES:
                         self.player.moveDown()
 
+                if e.key == pygame.K_TAB:
+                    self.editmode = not self.editmode
+
+
             if e.type == pygame.QUIT:
                 self.running = False
                 return
@@ -138,6 +143,11 @@ class Game:
 
         #self.font.centerText(self.screen, 'CATS HAVE NINE LIVES', y=5)
         #self.font.centerText(self.screen, 'F11 or ALT+ENTER = FULLSCREEN', y=7)
+
+        # show editmode
+        if self.editmode:
+            self.font.drawText(self.screen, 'EDIT MODE', x=1, y=1)
+        
 
         pygame.display.flip()
 
