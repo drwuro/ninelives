@@ -37,6 +37,7 @@ TILES = {'#': pygame.image.load('gfx/wall.png'),
          'b': pygame.image.load('gfx/box.png'),
          'g': pygame.image.load('gfx/fish_dead.png'),
          'f': pygame.image.load('gfx/fish_alive.png'),
+         'k': pygame.image.load('gfx/candle.png'),
 
 
          'cat': pygame.image.load('gfx/cat.png'),
