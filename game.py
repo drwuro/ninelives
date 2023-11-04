@@ -37,6 +37,7 @@ TILES = {'#': pygame.image.load('gfx/wall.png'),
          'g': pygame.image.load('gfx/g.png'),
 
          'cat': pygame.image.load('gfx/cat.png'),
+         'cursor': pygame.image.load('gfx/cursor.png'),
          }
 
 OBSTACLES = ['#', '+']
@@ -102,6 +103,7 @@ class Object:
 
         return False
 
+
 class Game:
     def __init__(self):
         self.initVideo()
@@ -111,6 +113,9 @@ class Game:
         self.font = BitmapFont('gfx/heimatfont.png')
 
         self.player = Object('cat')
+
+        # editmode
+        self.editcursor = Object('cursor')
 
     def initVideo(self):
         flags = pygame.SCALED
@@ -270,9 +275,11 @@ class Game:
         # show editmode
         if self.editmode:
             self.font.drawText(self.screen, 'EDIT MODE', x=1, y=1)
+            self.cursor.render(self.screen)
 
 
         pygame.display.flip()
+
 
         #editmode
     def editmode(self):
