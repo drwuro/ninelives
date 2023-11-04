@@ -189,6 +189,8 @@ class Game:
             for x in range(LEV_W):
                 if self.getTile(x, y) == 'k':
                     self.emitLighting(x, y)
+                elif self.getTile(x, y) in ['t', 'u', 'v', 'w']:
+                    self.emitFlashlight(x, y)
 
     def emitLighting(self, x, y):
         INTENSITY = [' ', 'j', 'i', 'i']
@@ -206,6 +208,33 @@ class Game:
                     illuminate(x + coords[0], y + coords[1], intensity -1)
 
         illuminate(x, y, 3)
+
+    def emitFlashlight(self, x, y):
+        flashlight = self.getTile(x, y)
+
+        if flashlight == 't':
+            coord = (0, -1)
+
+        elif flashlight == 'u':
+            coord = (1, 0)
+
+        elif flashlight == 'v':
+            coord = (0, 1)
+
+        elif flashlight == 'w':
+            coord = (-1, 0)
+
+        while True:
+            x += coord[0]
+            y += coord[1]
+
+            if x < 0 or x >= LEV_W or y < 0 or y > LEV_H:
+                break
+
+            if self.getTile(x, y) in LIGHT_BLOCKERS:
+                break
+
+            self.setFloor(x, y, 'i')
 
     ###
 
