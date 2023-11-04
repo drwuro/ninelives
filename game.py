@@ -210,10 +210,14 @@ class Game:
     def run(self):
         self.running = True
 
+        clock = pygame.time.Clock()
+
         while self.running:
             self.render()
             self.controls()
             self.update()
+
+            clock.tick(60)
 
 
 game = Game()
