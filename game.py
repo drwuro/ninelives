@@ -18,7 +18,7 @@ TILES = {'#': pygame.image.load('gfx/wall.png'),
          'cat': pygame.image.load('gfx/cat.png'),
          }
 
-OBSTACLES = ['#']
+OBSTACLES = ['#', '+']
 
 
 class Object:
@@ -147,7 +147,7 @@ class Game:
         # show editmode
         if self.editmode:
             self.font.drawText(self.screen, 'EDIT MODE', x=1, y=1)
-        
+
 
         pygame.display.flip()
 
