@@ -73,6 +73,9 @@ class Game:
     def setTile(self, x, y, tile):
         self.level[y] = self.level[y][:x] + tile + self.level[y][x+1:]
 
+    def getTile(self, x, y):
+        return self.level[y][x]
+
     ###
 
     def controls(self):
@@ -122,8 +125,8 @@ class Game:
         # draw cat
         self.player.render(self.screen)
 
-        self.font.centerText(self.screen, 'CATS HAVE NINE LIVES', y=5)
-        self.font.centerText(self.screen, 'F11 or ALT+ENTER = FULLSCREEN', y=7)
+        #self.font.centerText(self.screen, 'CATS HAVE NINE LIVES', y=5)
+        #self.font.centerText(self.screen, 'F11 or ALT+ENTER = FULLSCREEN', y=7)
 
         pygame.display.flip()
 
