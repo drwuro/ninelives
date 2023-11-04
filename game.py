@@ -20,6 +20,7 @@ TILES = {'#': pygame.image.load('gfx/wall.png'),
          }
 
 OBSTACLES = ['#', '+']
+FLOORS = [' ', 'i', 'j']
 
 
 class Object:
@@ -78,6 +79,9 @@ class Game:
         self.level[y] = self.level[y][:x] + tile + self.level[y][x+1:]
 
     def getTile(self, x, y):
+        if x >= len(self.level[0]) or y >= len(self.level):
+            return '+'
+
         return self.level[y][x]
 
     ###
@@ -87,6 +91,11 @@ class Game:
         tileRight = self.getTile(self.player.xpos +1, self.player.ypos)
         tileUp = self.getTile(self.player.xpos, self.player.ypos -1)
         tileDown = self.getTile(self.player.xpos, self.player.ypos +1)
+
+        tileLeft2 = self.getTile(self.player.xpos -2, self.player.ypos)
+        tileRight2 = self.getTile(self.player.xpos +2, self.player.ypos)
+        tileUp2 = self.getTile(self.player.xpos, self.player.ypos -2)
+        tileDown2 = self.getTile(self.player.xpos, self.player.ypos +2)
 
         while True:
             e = pygame.event.poll()
@@ -106,19 +115,39 @@ class Game:
 
                 if e.key == pygame.K_LEFT:
                     if tileLeft not in OBSTACLES:
-                        self.player.moveLeft()
+                        if tileLeft == 'b' and tileLeft2 in FLOORS:
+                            self.setTile(self.player.xpos -2, self.player.ypos, 'b')
+                            self.setTile(self.player.xpos -1, self.player.ypos, ' ')
+                            self.player.moveLeft()
+                        else:
+                            self.player.moveLeft()
 
                 if e.key == pygame.K_RIGHT:
                     if tileRight not in OBSTACLES:
-                        self.player.moveRight()
+                        if tileRight == 'b' and tileRight2 in FLOORS:
+                            self.setTile(self.player.xpos +2, self.player.ypos, 'b')
+                            self.setTile(self.player.xpos +1, self.player.ypos, ' ')
+                            self.player.moveRight()
+                        else:
+                            self.player.moveRight()
 
                 if e.key == pygame.K_UP:
                     if tileUp not in OBSTACLES:
-                        self.player.moveUp()
+                        if tileUp == 'b' and tileUp2 in FLOORS:
+                            self.setTile(self.player.xpos, self.player.ypos -2, 'b')
+                            self.setTile(self.player.xpos, self.player.ypos -1, ' ')
+                            self.player.moveUp()
+                        else:
+                            self.player.moveUp()
 
                 if e.key == pygame.K_DOWN:
                     if tileDown not in OBSTACLES:
-                        self.player.moveDown()
+                        if tileDown == 'b' and tileDown2 in FLOORS:
+                            self.setTile(self.player.xpos, self.player.ypos +2, 'b')
+                            self.setTile(self.player.xpos, self.player.ypos +1, ' ')
+                            self.player.moveDown()
+                        else:
+                            self.player.moveDown()
 
                 if e.key == pygame.K_TAB:
                     self.editmode = not self.editmode
