@@ -184,7 +184,7 @@ class Game:
             for y, line in enumerate(self.level):
                 f.write(line)
                 # f.write('\n')
-               
+
 
     def setTile(self, x, y, tile):
         if x >= LEV_W or y >= LEV_H or x < 0 or y < 0:
@@ -454,6 +454,8 @@ class Game:
 
         # draw cat
         self.player.render(self.screen)
+
+        TILES['cat_ghost'].set_alpha(64 + (time.time() * 100) % 128)
 
         #self.font.centerText(self.screen, 'CATS HAVE NINE LIVES', y=5)
         #self.font.centerText(self.screen, 'F11 or ALT+ENTER = FULLSCREEN', y=7)
