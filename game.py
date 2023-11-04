@@ -34,7 +34,7 @@ TILES = {'#': pygame.image.load('gfx/wall.png'),
          'i': pygame.image.load('gfx/floor_i.png'),
          'j': pygame.image.load('gfx/floor_j.png'),
          'b': pygame.image.load('gfx/box.png'),
-         'g': pygame.image.load('gfx/dead_fish.png'),
+         'g': pygame.image.load('gfx/fish_dead.png'),
 
          'cat': pygame.image.load('gfx/cat.png'),
          'cursor': pygame.image.load('gfx/cursor.png'),
@@ -91,10 +91,11 @@ class Object:
             self.ydir = 0
 
     def update(self):
+        if self.xdir != 0 or self.ydir != 0:
+            self.movedelay = 8
+
         self.xpos += self.xdir
         self.ypos += self.ydir
-
-        self.movedelay = 8
 
     def mayMove(self):
         self.movedelay -= 1
@@ -297,7 +298,7 @@ class Game:
 
         pygame.display.flip()
 
-        
+
 
 
     def run(self):
