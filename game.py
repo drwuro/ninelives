@@ -5,6 +5,7 @@ from bitmapfont import BitmapFont
 
 SCR_W, SCR_H = 320, 180
 TW, TH = 16, 16
+LEV_W, LEV_H = 20, 11
 
 pygame.init()
 
@@ -142,14 +143,52 @@ class Game:
                     self.player.ypos = y
                     self.setTile(x, y, ' ')
 
+        self.floor = [' ' * LEV_W] * LEV_H
+
     def setTile(self, x, y, tile):
+        if x >= LEV_W or y >= LEV_H or x < 0 or y < 0:
+            return
+
         self.level[y] = self.level[y][:x] + tile + self.level[y][x+1:]
 
     def getTile(self, x, y):
-        if x >= len(self.level[0]) or y >= len(self.level):
+        if x >= LEV_W or y >= LEV_H or x < 0 or y < 0:
             return '+'
 
         return self.level[y][x]
+
+    def setFloor(self, x, y, tile):
+        if x >= LEV_W or y >= LEV_H or x < 0 or y < 0:
+            return
+
+        self.floor[y] = self.floor[y][:x] + tile + self.floor[y][x+1:]
+
+    def getFloor(self, x, y):
+        if x >= LEV_W or y >= LEV_H or x < 0 or y < 0:
+            return ' '
+
+        return self.floor[y][x]
+
+    def calcLighting(self):
+        # clear all lighting
+        for y in range(LEV_H):
+            for x in range(LEV_W):
+                self.setFloor(x, y, ' ')
+
+        # re-calculate lighting
+        for y in range(LEV_H):
+            for x in range(LEV_W):
+                if self.getTile(x, y) == 'k':
+                    self.setFloor(x, y, 'i')
+
+                    if self.getTile(x -1, y) == ' ':
+                        self.setFloor(x -1, y, 'i')
+                    if self.getTile(x +1, y) == ' ':
+                        self.setFloor(x +1, y, 'i')
+                    if self.getTile(x, y -1) == ' ':
+                        self.setFloor(x, y -1, 'i')
+                    if self.getTile(x, y +1) == ' ':
+                        self.setFloor(x, y +1, 'i')
 
     ###
 
@@ -273,16 +312,22 @@ class Game:
                 else:
                     self.player.update()
 
+        self.calcLighting()
+
     def render(self):
         self.screen.fill((0, 0, 0))
 
         for y, line in enumerate(self.level):
             for x, tile in enumerate(line):
-                # always draw floor
-                self.screen.blit(TILES[' '], (x * TW, y * TH))
 
+                # draw floor / lighting
+                floortile = self.getFloor(x, y)
+                self.screen.blit(TILES[floortile], (x * TW, y * TH))
+
+                # draw actual tile
                 if tile in TILES:
-                    self.screen.blit(TILES[tile], (x * TW, y * TH))
+                    if tile != ' ':
+                        self.screen.blit(TILES[tile], (x * TW, y * TH))
                 else:
                     self.screen.blit(TILES['dummy'], (x * TW, y * TH))
 
