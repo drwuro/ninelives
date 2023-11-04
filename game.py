@@ -254,6 +254,9 @@ class Game:
 
         for y, line in enumerate(self.level):
             for x, tile in enumerate(line):
+                # always draw floor
+                self.screen.blit(TILES[' '], (x * TW, y * TH))
+
                 if tile in TILES:
                     self.screen.blit(TILES[tile], (x * TW, y * TH))
 
