@@ -55,7 +55,6 @@ TILES = {'#': pygame.image.load('gfx/wall.png'),
          'e': pygame.image.load('gfx/enemy_1.png'),
          '-': pygame.image.load('gfx/floor_g.png'),
 
-         'c': pygame.image.load('gfx/cat.png'),
          'cat': pygame.image.load('gfx/cat.png'),
          'cat_ghost': pygame.image.load('gfx/cat_g.png'),
          'cursor': pygame.image.load('gfx/cursor.png'),
@@ -146,6 +145,8 @@ class Game:
 
         self.font = BitmapFont('gfx/heimatfont.png')
 
+        self.levelno = 1
+
         self.player = Object('cat')
 
         # editmode
@@ -179,22 +180,11 @@ class Game:
     def saveLevel(self, number):
         filename = 'lev/level%i' % number
 
-#        with open(filename) as f:
-#            lines = f.
-
-#        self.level = lines
-
-        # find player start pos
-
-        for y, line in enumerate(self.level):
-            for x, tile in enumerate(line):
-                if tile == 'c':
-                    self.player.xpos = x
-                    self.player.ypos = y
-                    self.setTile(x, y, ' ')
-
-        self.floor = [' ' * LEV_W] * LEV_H
-
+        with open(filename, 'w') as f:
+            for y, line in enumerate(self.level):
+                f.write(line)
+                # f.write('\n')
+               
 
     def setTile(self, x, y, tile):
         if x >= LEV_W or y >= LEV_H or x < 0 or y < 0:
@@ -470,7 +460,9 @@ class Game:
 
         # show editmode
         if self.editmode:
-            self.font.drawText(self.screen, 'EDIT MODE .. EDIT MODE .. EDIT MODE .. ', x=1, y=21)
+            self.font.drawText(self.screen, 'EDIT MODE ', x=1, y=21)
+            self.font.drawText(self.screen, 'LEVEL ' + str(self.levelno), x=12, y=21)
+            self.font.drawText(self.screen, ' — L.OAD, S.AVE', x=21, y=21)
             self.cursor.render(self.screen)
 
 
@@ -494,8 +486,9 @@ class Game:
 
 game = Game()
 
-game.loadLevel(1)
+game.loadLevel(2)
 game.run()
 
 pygame.quit()
+game.saveLevel(2)
 
