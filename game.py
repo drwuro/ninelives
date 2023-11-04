@@ -51,6 +51,7 @@ TILES = {'#': pygame.image.load('gfx/wall.png'),
          'e': pygame.image.load('gfx/enemy_1.png'),
 
 
+         'c': pygame.image.load('gfx/cat.png'),
          'cat': pygame.image.load('gfx/cat.png'),
          'cursor': pygame.image.load('gfx/cursor.png'),
          'dummy': pygame.image.load('gfx/dummy.png'),
