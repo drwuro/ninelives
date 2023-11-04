@@ -39,6 +39,8 @@ TILES = {'#': pygame.image.load('gfx/wall.png'),
          'jd': pygame.image.load('gfx/floor_jd.png'),
          'b': pygame.image.load('gfx/box.png'),
          'g': pygame.image.load('gfx/fish_dead.png'),
+         'g1': pygame.image.load('gfx/fish_dead2.png'),
+         'g3': pygame.image.load('gfx/fish_dead3.png'),
          'f': pygame.image.load('gfx/fish_alive.png'),
          'k': pygame.image.load('gfx/candle.png'),
          'kd': pygame.image.load('gfx/candle_d.png'),
@@ -392,6 +394,12 @@ class Game:
                         if tile == 'k':
                             if flicker:
                                 tile += 'd'
+
+                        elif tile == 'g':
+                            anim = int((time.time() * 1000) % 800 / 200)
+
+                            if anim == 1 or anim == 3:
+                                tile += str(anim)
 
                         self.screen.blit(TILES[tile], (x * TW, y * TH))
                 else:
