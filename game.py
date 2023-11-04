@@ -53,11 +53,20 @@ TILES = {'#': pygame.image.load('gfx/wall.png'),
 
          'c': pygame.image.load('gfx/cat.png'),
          'cat': pygame.image.load('gfx/cat.png'),
+         'cat_ghost': pygame.image.load('gfx/cat_g.png'),
          'cursor': pygame.image.load('gfx/cursor.png'),
          'dummy': pygame.image.load('gfx/dummy.png'),
          }
 
-OBSTACLES = ['#', '+']
+OBSTACLES_AS_CAT = ['#', '+']
+OBSTACLES_AS_GHOST = ['+']
+
+PUSHABLES_AS_CAT = ['b']
+PUSHABLES_AS_GHOST = []
+
+OBSTACLES = OBSTACLES_AS_CAT
+PUSHABLES = PUSHABLES_AS_CAT
+
 FLOORS = [' ', 'i', 'j']
 LIGHT_BLOCKERS = ['#', '+', 'b']
 
@@ -129,6 +138,8 @@ class Game:
 
         self.running = False
         self.editmode = False
+        self.ghostmode = False
+
         self.font = BitmapFont('gfx/heimatfont.png')
 
         self.player = Object('cat')
@@ -263,6 +274,14 @@ class Game:
 
             self.setFloor(x, y, 'i')
 
+    def enterGhostMode(self):
+        self.ghostmode = True
+        self.player.sprite_id = 'cat_ghost'
+
+        global OBSTACLES, PUSHABLES
+        OBSTACLES = OBSTACLES_AS_GHOST
+        PUSHABLES = PUSHABLES_AS_GHOST
+
     ###
 
     def controls(self):
@@ -357,9 +376,9 @@ class Game:
 
         if self.player.xdir == -1:
             if tileLeft not in OBSTACLES:
-                if tileLeft == 'b':
+                if tileLeft in PUSHABLES:
                     if tileLeft2 in FLOORS:
-                        self.setTile(self.player.xpos -2, self.player.ypos, 'b')
+                        self.setTile(self.player.xpos -2, self.player.ypos, tileLeft)
                         self.setTile(self.player.xpos -1, self.player.ypos, ' ')
                         self.player.update()
                 else:
@@ -367,9 +386,9 @@ class Game:
 
         if self.player.xdir == 1:
             if tileRight not in OBSTACLES:
-                if tileRight == 'b':
+                if tileRight in PUSHABLES:
                     if tileRight2 in FLOORS:
-                        self.setTile(self.player.xpos +2, self.player.ypos, 'b')
+                        self.setTile(self.player.xpos +2, self.player.ypos, tileRight)
                         self.setTile(self.player.xpos +1, self.player.ypos, ' ')
                         self.player.update()
                 else:
@@ -377,9 +396,9 @@ class Game:
 
         if self.player.ydir == -1:
             if tileUp not in OBSTACLES:
-                if tileUp == 'b':
+                if tileUp in PUSHABLES:
                     if tileUp2 in FLOORS:
-                        self.setTile(self.player.xpos, self.player.ypos -2, 'b')
+                        self.setTile(self.player.xpos, self.player.ypos -2, tileUp)
                         self.setTile(self.player.xpos, self.player.ypos -1, ' ')
                         self.player.update()
                 else:
@@ -387,13 +406,16 @@ class Game:
 
         if self.player.ydir == 1:
             if tileDown not in OBSTACLES:
-                if tileDown == 'b':
+                if tileDown in PUSHABLES:
                     if tileDown2 in FLOORS:
-                        self.setTile(self.player.xpos, self.player.ypos +2, 'b')
+                        self.setTile(self.player.xpos, self.player.ypos +2, tileDown)
                         self.setTile(self.player.xpos, self.player.ypos +1, ' ')
                         self.player.update()
                 else:
                     self.player.update()
+
+        if self.getTile(self.player.xpos, self.player.ypos) == 'e':
+            self.enterGhostMode()
 
         self.calcLighting()
 
