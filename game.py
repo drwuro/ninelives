@@ -8,20 +8,20 @@ TW, TH = 16, 16
 
 pygame.init()
 
-os.environ['SDL_VIDEO_WINDOW_POS'] = "-1,-1"
+#   os.environ['SDL_VIDEO_WINDOW_POS'] = WINDOWPOS_CENTERED
 
 #       TILE repository:
 #       +   "stahlwand"
 #       #   wand
 #           bodenfliese
+#       i   beleuchtet
+#         j halb beleuchtet
 #       b   box
 #       k   kerze
 #       t   taschenlampe TOP
 #         u taschenlampe RIGHT
 #         v taschenlampe DOWN
 #         w taschenlampe LEFT
-#       i   beleuchtet
-#         j halb beleuchtet
 #       f   fisch
 #       g   "gestorbener" fisch
 #       e   enemy (starting position)
