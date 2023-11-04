@@ -66,9 +66,9 @@ class Game:
         for y, line in enumerate(self.level):
             for x, tile in enumerate(line):
                 if tile == 'c':
-                    self.setTile(x, y, ' ')
                     self.player.xpos = x
                     self.player.ypos = y
+                    self.setTile(x, y, ' ')
 
     def setTile(self, x, y, tile):
         self.level[y] = self.level[y][:x] + tile + self.level[y][x+1:]
