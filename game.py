@@ -408,10 +408,22 @@ class Game:
                 else:
                     self.player.update()
 
-        if self.getTile(self.player.xpos, self.player.ypos) == 'e':
+
+        cur_tile = self.getTile(self.player.xpos, self.player.ypos)
+
+        if cur_tile == 'e':
             self.enterGhostMode()
 
+        elif cur_tile == 'f':
+            if not self.ghostmode:
+                self.setTile(self.player.xpos, self.player.ypos, ' ')
+
+        elif cur_tile == 'g':
+            if self.ghostmode:
+                self.setTile(self.player.xpos, self.player.ypos, ' ')
+
         self.calcLighting()
+
 
     def render(self):
         self.screen.fill((0, 0, 0))
