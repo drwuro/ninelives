@@ -40,6 +40,7 @@ TILES = {'#': pygame.image.load('gfx/wall.png'),
          'k': pygame.image.load('gfx/candle.png'),
          't': pygame.image.load('gfx/Taschenlampe.png'),
          'v': pygame.image.load('gfx/Taschenlampe.png'),
+         'e': pygame.image.load('gfx/enemy_1.png'),
 
 
          'cat': pygame.image.load('gfx/cat.png'),
@@ -228,6 +229,13 @@ class Game:
                 if e.key == pygame.K_RETURN and pygame.key.get_mods() & pygame.KMOD_ALT:
                     pygame.display.toggle_fullscreen()
 
+                if self.editmode:
+                    if e.unicode in TILES:
+                        if e.unicode != self.getTile(self.cursor.xpos, self.cursor.ypos):
+                            self.setTile(self.cursor.xpos, self.cursor.ypos, e.unicode)
+                        else:
+                            self.setTile(self.cursor.xpos, self.cursor.ypos, " ")
+
 
                 if e.key == pygame.K_LEFT:
                     cur_object.moveLeft()
@@ -254,6 +262,9 @@ class Game:
 
                 if e.key == pygame.K_UP:
                     cur_object.stopUp()
+
+                if e.key == pygame.K_DOWN:
+                    cur_object.stopDown()
 
                 if e.key == pygame.K_DOWN:
                     cur_object.stopDown()
