@@ -339,7 +339,7 @@ class Game:
 
         # show editmode
         if self.editmode:
-            self.font.drawText(self.screen, 'EDIT MODE', x=1, y=1)
+            self.font.drawText(self.screen, 'EDIT MODE .. EDIT MODE .. EDIT MODE .. ', x=1, y=21)
             self.cursor.render(self.screen)
 
 
