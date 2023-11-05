@@ -447,10 +447,26 @@ class Game:
             tileUp2 = self.getTile(self.player.xpos, self.player.ypos -2)
             tileDown2 = self.getTile(self.player.xpos, self.player.ypos +2)
 
+            # check if enemies are behind pushables:
+            enemLeft = False
+            enemRight = False
+            enemUp = False
+            enemDown = False
+            for enemy in self.enemies:
+                if enemy.xpos == self.player.xpos -2 and enemy.ypos == self.player.ypos:
+                    enemLeft = True
+                if enemy.xpos == self.player.xpos +2 and enemy.ypos == self.player.ypos:
+                    enemRight = True
+                if enemy.xpos == self.player.xpos and enemy.ypos == self.player.ypos -2:
+                    enemUp = True
+                if enemy.xpos == self.player.xpos and enemy.ypos == self.player.ypos +2:
+                    enemDown = True
+
+            # check crate pushing
             if self.player.xdir == -1:
                 if tileLeft not in OBSTACLES:
                     if tileLeft in PUSHABLES:
-                        if tileLeft2 in FLOORS:
+                        if tileLeft2 in FLOORS and not enemLeft:
                             self.setTile(self.player.xpos -2, self.player.ypos, tileLeft)
                             self.setTile(self.player.xpos -1, self.player.ypos, ' ')
                             self.player.update()
@@ -460,7 +476,7 @@ class Game:
             if self.player.xdir == 1:
                 if tileRight not in OBSTACLES:
                     if tileRight in PUSHABLES:
-                        if tileRight2 in FLOORS:
+                        if tileRight2 in FLOORS and not enemRight:
                             self.setTile(self.player.xpos +2, self.player.ypos, tileRight)
                             self.setTile(self.player.xpos +1, self.player.ypos, ' ')
                             self.player.update()
@@ -470,7 +486,7 @@ class Game:
             if self.player.ydir == -1:
                 if tileUp not in OBSTACLES:
                     if tileUp in PUSHABLES:
-                        if tileUp2 in FLOORS:
+                        if tileUp2 in FLOORS and not enemUp:
                             self.setTile(self.player.xpos, self.player.ypos -2, tileUp)
                             self.setTile(self.player.xpos, self.player.ypos -1, ' ')
                             self.player.update()
@@ -480,7 +496,7 @@ class Game:
             if self.player.ydir == 1:
                 if tileDown not in OBSTACLES:
                     if tileDown in PUSHABLES:
-                        if tileDown2 in FLOORS:
+                        if tileDown2 in FLOORS and not enemDown:
                             self.setTile(self.player.xpos, self.player.ypos +2, tileDown)
                             self.setTile(self.player.xpos, self.player.ypos +1, ' ')
                             self.player.update()
