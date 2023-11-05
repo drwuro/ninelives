@@ -67,9 +67,9 @@ TILES = {'#': pygame.image.load('gfx/wall.png'),
          'dummy': pygame.image.load('gfx/dummy.png'),
          }
 
-OBSTACLES_AS_CAT = ['#', '+']
-OBSTACLES_AS_GHOST = ['+']
-OBSTACLES_AS_ENEMY = ['#', '+', 'b']
+OBSTACLES_AS_CAT = ['#', '+', 'k', 't', 'u', 'v', 'w']
+OBSTACLES_AS_GHOST = ['+', 'k', 't', 'u', 'v', 'w']
+OBSTACLES_AS_ENEMY = ['#', '+', 'b', 'k', 't', 'u', 'v', 'w']
 
 PUSHABLES_AS_CAT = ['b']
 PUSHABLES_AS_GHOST = []
@@ -351,6 +351,9 @@ class Game:
                         self.loadLevel(self.levelno)
                         self.enterNormalMode()
                         self.exitmode = False
+                        self.levelcomplete = False
+                        self.gamecomplete = False
+                        self.gameover = False
                 if e.key == pygame.K_q:
                     if self.exitmode:
                         self.running = False
@@ -375,7 +378,6 @@ class Game:
                                 self.saving = not self.saving
 
                     if e.key == pygame.K_RETURN:
-                        print(e.key)
                         self.saveLevel(self.levelno)
                         self.saving = False
 
