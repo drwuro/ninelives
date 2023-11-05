@@ -59,6 +59,7 @@ TILES = {'#': pygame.image.load('gfx/wall.png'),
          'cat_ghost': pygame.image.load('gfx/cat_g.png'),
          'cat_ghost2': pygame.image.load('gfx/cat_g2.png'),
          'cursor': pygame.image.load('gfx/cursor.png'),
+         'saving': pygame.image.load('gfx/areyousure.png'),
          'dummy': pygame.image.load('gfx/dummy.png'),
          }
 
@@ -153,6 +154,9 @@ class Game:
 
         # editmode
         self.cursor = Object('cursor')
+
+        # savemode
+        self.cursor = Object('saving')
 
     def initVideo(self):
         flags = pygame.SCALED
@@ -543,5 +547,4 @@ game.loadLevel(1)
 game.run()
 
 pygame.quit()
-game.saveLevel(game.levelno)
 
