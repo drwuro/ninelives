@@ -149,6 +149,7 @@ class Game:
 
         self.running = False
         self.editmode = False
+        self.saving = False
         self.exitmode = False
         self.ghostmode = False
         self.gameover = False
@@ -168,8 +169,7 @@ class Game:
         # editmode
         self.cursor = Object('cursor')
 
-        # savemode
-        self.cursor = Object('saving')
+
 
     def initVideo(self):
         flags = pygame.SCALED
@@ -371,7 +371,12 @@ class Game:
                             self.levelno = int(e.unicode)
                         else:
                             if e.unicode == "s":
-                                self.saveLevel(self.levelno)
+                                self.saving = not self.saving
+
+                    if e.key == pygame.K_RETURN:
+                        print(e.key)
+                        self.saveLevel(self.levelno)
+                        self.saving = False
 
 
 
@@ -688,10 +693,13 @@ class Game:
 
 
         # show editmode
-        if self.editmode:
+        if self.editmode and not self.saving:
             self.font.drawText(self.screen, 'EDIT MODE --- LEVEL ' + str(self.levelno), x=1, y=21)
-            # self.font.drawText(self.screen, '' + str(self.levelno), x=12, y=21)
             self.cursor.render(self.screen)
+        if self.editmode and self.saving:
+            self.font.drawText(self.screen, 'SAVE LEVEL ' + str(self.levelno) + '?  [S] no  /  [ENTER] OK ', x=1, y=21)
+            
+
 
 
         pygame.display.flip()
