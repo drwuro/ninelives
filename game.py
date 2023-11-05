@@ -395,9 +395,11 @@ class Game:
     def update(self):
         # update cursor (editmode)
 
-        if self.cursor.mayMove():
-            self.cursor.update()
+        if self.editmode:
+            if self.cursor.mayMove():
+                self.cursor.update()
 
+            return
 
         # update cat
 
