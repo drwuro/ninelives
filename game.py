@@ -151,6 +151,7 @@ class Game:
         self.editmode = False
         self.ghostmode = False
         self.gameover = False
+        self.levelcomplete = False
 
         self.font = BitmapFont('gfx/heimatfont.png')
 
@@ -158,6 +159,7 @@ class Game:
 
         self.player = Object('cat')
         self.enemies = []
+        self.fishcount = 0
 
         # editmode
         self.cursor = Object('cursor')
@@ -179,8 +181,10 @@ class Game:
 
         self.level = lines
 
-        # find player start pos and create enemies
+        # find player start pos and create enemies etc
         self.enemies = []
+        self.fishcount = 0
+
         for y, line in enumerate(self.level):
             for x, tile in enumerate(line):
                 if tile == 'c':
@@ -193,6 +197,9 @@ class Game:
                     enemy.speed = 32
                     self.enemies.append(enemy)
                     #self.setTile(x, y, ' ')
+
+                if tile in ['f', 'g']:
+                    self.fishcount += 1
 
         self.floor = [' ' * LEV_W] * LEV_H
 
@@ -368,6 +375,13 @@ class Game:
 
                         self.enterNormalMode()
 
+                    elif self.levelcomplete:
+                        self.levelcomplete = False
+                        self.levelno += 1
+                        self.loadLevel(self.levelno)
+
+                        self.enterNormalMode()
+
 
                 if e.key == pygame.K_TAB:
                     self.editmode = not self.editmode
@@ -460,14 +474,19 @@ class Game:
         if cur_tile == 'f':
             if not self.ghostmode:
                 self.setTile(cur_x, cur_y, ' ')
+                self.fishcount -= 1
 
         elif cur_tile == 'g':
             if self.ghostmode:
                 self.setTile(cur_x, cur_y, ' ')
+                self.fishcount -= 1
 
         if self.getFloor(cur_x, cur_y) != ' ':
             if self.ghostmode:
                 self.gameover = True
+
+        if self.fishcount == 0:
+            self.levelcomplete = True
 
 
         # update lighting
@@ -584,6 +603,10 @@ class Game:
         # game over
         if self.gameover:
             self.font.centerText(self.screen, 'GAME OVER', y=10)
+            self.font.centerText(self.screen, 'PRESS SPACE', y=12)
+
+        if self.levelcomplete:
+            self.font.centerText(self.screen, 'LEVEL COMPLETE!', y=10)
             self.font.centerText(self.screen, 'PRESS SPACE', y=12)
 
 
