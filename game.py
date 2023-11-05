@@ -149,6 +149,7 @@ class Game:
 
         self.running = False
         self.editmode = False
+        self.exitmode = False
         self.ghostmode = False
         self.gameover = False
         self.levelcomplete = False
@@ -338,8 +339,21 @@ class Game:
 
             if e.type == pygame.KEYDOWN:
                 if e.key == pygame.K_ESCAPE:
-                    self.running = False
-                    return
+                    if not self.gamecomplete and not self.levelcomplete and not self.gameover and not self.titlescreen:
+                        self.exitmode = not self.exitmode
+                    else:
+                        self.running = False
+                        return
+
+                if e.key == pygame.K_r:
+                    if self.exitmode:
+                        self.loadLevel(self.levelno)
+                        self.enterNormalMode()
+                        self.exitmode = False
+                if e.key == pygame.K_q:
+                    if self.exitmode:
+                        self.running = False
+
                 if e.key == pygame.K_F11:
                     pygame.display.toggle_fullscreen()
                 if e.key == pygame.K_RETURN and pygame.key.get_mods() & pygame.KMOD_ALT:
@@ -665,6 +679,12 @@ class Game:
             self.bigfont.centerText(self.screen, 'NINE LIVES', y=3)
             self.font.centerText(self.screen, 'A BODENSEE GAMEJAM 2023 GAME BY', y=14)
             self.font.centerText(self.screen, 'MSMR, ROSOBE, ZEHA', y=16)
+
+        if self.exitmode:
+            self.font.centerText(self.screen, 'PAUSED', y=8)
+            self.font.centerText(self.screen, 'R = RETRY', y=10)
+            self.font.centerText(self.screen, 'ESC = BACK TO GAME', y=11)
+            self.font.centerText(self.screen, 'Q = QUIT', y=12)
 
 
         # show editmode
