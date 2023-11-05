@@ -423,6 +423,9 @@ class Game:
 
                 if e.key == pygame.K_TAB:
                     self.editmode = not self.editmode
+                #if e.unicode == "s":
+                #    if e.key == pygame.K_TAB: 
+                #        self.saving = not self.saving
 
             if e.type == pygame.KEYUP:
                 if e.key == pygame.K_LEFT:
