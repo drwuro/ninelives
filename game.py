@@ -639,6 +639,10 @@ class Game:
         if self.titlescreen:
             self.screen.fill((0,0,0))
 
+            for y in range(LEV_H):
+                for x in range(LEV_W):
+                    self.screen.blit(TILES[' '], (x * TW, y * TH))
+
             self.screen.blit(TILES['cat'], (SCR_W / 2 - TW / 2, SCR_H / 2 - TH / 2))
 
             self.font.centerText(self.screen, '*** NINE LIVES ***', y=4)
