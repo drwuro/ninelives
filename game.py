@@ -624,9 +624,12 @@ class Game:
 
         if self.gamecomplete:
             self.screen.fill((0,0,0))
-            self.font.centerText(self.screen, 'CONGRATULATIONS!', y=8)
-            self.font.centerText(self.screen, 'YOU WON THE GAME!', y=10)
-            self.font.centerText(self.screen, 'PRESS SPACE TO RESTART', y=14)
+
+            self.screen.blit(TILES['cat'], (SCR_W / 2 - TW / 2, SCR_H / 2 - TH / 2))
+
+            self.font.centerText(self.screen, 'CONGRATULATIONS!', y=4)
+            self.font.centerText(self.screen, 'YOU WON THE GAME!', y=6)
+            self.font.centerText(self.screen, 'PRESS SPACE TO RESTART', y=16)
 
 
         # show editmode
