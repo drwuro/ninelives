@@ -375,7 +375,6 @@ class Game:
                                 self.saving = not self.saving
 
                     if e.key == pygame.K_RETURN:
-                        print(e.key)
                         self.saveLevel(self.levelno)
                         self.saving = False
 
