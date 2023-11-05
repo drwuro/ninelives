@@ -53,6 +53,8 @@ TILES = {'#': pygame.image.load('gfx/wall.png'),
          'u2': pygame.image.load('gfx/Taschenlampe_u2.png'),
          'w2': pygame.image.load('gfx/Taschenlampe_w2.png'),
          '-': pygame.image.load('gfx/floor_g.png'),
+         'c': pygame.image.load('gfx/cat.png'),
+         'e': pygame.image.load('gfx/enemy_1.png'),
 
          'enemy': pygame.image.load('gfx/enemy_1.png'),
          'enemy2': pygame.image.load('gfx/enemy_2.png'),
@@ -533,45 +535,48 @@ class Game:
                 self.screen.blit(TILES[floortile], (x * TW, y * TH))
 
                 # draw actual tile
+                if tile == ' ':
+                    continue
+
                 if tile in TILES or tile in DO_NOT_RENDER:
-                    if tile not in DO_NOT_RENDER:
-                        if tile == 'k':
-                            if flicker:
-                                tile += 'd'
+                    if tile == 'k':
+                        if flicker:
+                            tile += 'd'
 
-                        elif tile == 'g':
-                            anim = int((time.time() * 1000) % 800 / 200)
+                    elif tile == 'g':
+                        anim = int((time.time() * 1000) % 800 / 200)
 
-                            if anim == 1 or anim == 3:
-                                tile += str(anim)
+                        if anim == 1 or anim == 3:
+                            tile += str(anim)
 
-                        elif tile in ['t', 'u', 'v', 'w']:
-                            if not flicker:
-                                tile += '2'
+                    elif tile in ['t', 'u', 'v', 'w']:
+                        if not flicker:
+                            tile += '2'
 
+                    if tile not in DO_NOT_RENDER or self.editmode:
                         self.screen.blit(TILES[tile], (x * TW, y * TH))
                 else:
                     self.screen.blit(TILES['dummy'], (x * TW, y * TH))
 
 
-        # draw enemies
-        for enemy in self.enemies:
-            enemy.render(self.screen)
+        if not self.editmode:
+            # draw enemies
+            for enemy in self.enemies:
+                enemy.render(self.screen)
 
-            if (time.time() * 1000) % 250 < 125:
-                enemy.sprite_id = 'enemy2'
-            else:
-                enemy.sprite_id = 'enemy'
+                if (time.time() * 1000) % 250 < 125:
+                    enemy.sprite_id = 'enemy2'
+                else:
+                    enemy.sprite_id = 'enemy'
 
+            # draw cat
+            self.player.render(self.screen)
 
-        # draw cat
-        self.player.render(self.screen)
-
-        if self.ghostmode:
-            if flicker:
-                self.player.sprite_id = 'cat_ghost'
-            else:
-                self.player.sprite_id = 'cat_ghost2'
+            if self.ghostmode:
+                if flicker:
+                    self.player.sprite_id = 'cat_ghost'
+                else:
+                    self.player.sprite_id = 'cat_ghost2'
 
 
         # game over
