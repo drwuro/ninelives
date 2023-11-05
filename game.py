@@ -77,7 +77,7 @@ PUSHABLES_AS_GHOST = []
 OBSTACLES = OBSTACLES_AS_CAT
 PUSHABLES = PUSHABLES_AS_CAT
 
-FLOORS = [' ', 'i', 'j']
+FLOORS = [' ', 'i', 'j', 'c', 'e']
 LIGHT_BLOCKERS = ['#', '+', 'b']
 DO_NOT_RENDER = ['e', 'c', ' ']
 
