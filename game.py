@@ -535,6 +535,11 @@ class Game:
         cur_x, cur_y = self.player.xpos, self.player.ypos
         cur_tile = self.getTile(cur_x, cur_y)
 
+        if self.getFloor(cur_x, cur_y) != ' ':
+            if self.ghostmode:
+                self.gameover = True
+                return
+
         if cur_tile == 'f':
             if not self.ghostmode:
                 self.setTile(cur_x, cur_y, ' ')
@@ -544,10 +549,6 @@ class Game:
             if self.ghostmode:
                 self.setTile(cur_x, cur_y, ' ')
                 self.fishcount -= 1
-
-        if self.getFloor(cur_x, cur_y) != ' ':
-            if self.ghostmode:
-                self.gameover = True
 
         if self.fishcount == 0:
             self.levelcomplete = True
