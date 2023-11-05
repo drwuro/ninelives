@@ -152,6 +152,7 @@ class Game:
         self.ghostmode = False
         self.gameover = False
         self.levelcomplete = False
+        self.gamecomplete = False
 
         self.font = BitmapFont('gfx/heimatfont.png')
 
@@ -173,6 +174,10 @@ class Game:
 
 
     # levels (load, save)
+    def levelExists(self, number):
+        filename = 'lev/level%i' % number
+        return os.path.exists(filename)
+
     def loadLevel(self, number):
         filename = 'lev/level%i' % number
 
@@ -372,14 +377,22 @@ class Game:
                     if self.gameover:
                         self.gameover = False
                         self.loadLevel(self.levelno)
-
                         self.enterNormalMode()
 
                     elif self.levelcomplete:
                         self.levelcomplete = False
                         self.levelno += 1
-                        self.loadLevel(self.levelno)
 
+                        if self.levelExists(self.levelno):
+                            self.loadLevel(self.levelno)
+                            self.enterNormalMode()
+                        else:
+                            self.gamecomplete = True
+
+                    elif self.gamecomplete:
+                        self.gamecomplete = False
+                        self.levelno = 1
+                        self.loadLevel(self.levelno)
                         self.enterNormalMode()
 
 
@@ -609,6 +622,12 @@ class Game:
             self.font.centerText(self.screen, 'LEVEL COMPLETE!', y=10)
             self.font.centerText(self.screen, 'PRESS SPACE', y=12)
 
+        if self.gamecomplete:
+            self.screen.fill((0,0,0))
+            self.font.centerText(self.screen, 'CONGRATULATIONS!', y=8)
+            self.font.centerText(self.screen, 'YOU WON THE GAME!', y=10)
+            self.font.centerText(self.screen, 'PRESS SPACE TO RESTART', y=14)
+
 
         # show editmode
         if self.editmode:
@@ -630,7 +649,9 @@ class Game:
         while self.running:
             self.render()
             self.controls()
-            self.update()
+
+            if not self.gamecomplete and not self.levelcomplete and not self.gameover:
+                self.update()
 
             clock.tick(60)
 
