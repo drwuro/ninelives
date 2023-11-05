@@ -57,6 +57,7 @@ TILES = {'#': pygame.image.load('gfx/wall.png'),
 
          'cat': pygame.image.load('gfx/cat.png'),
          'cat_ghost': pygame.image.load('gfx/cat_g.png'),
+         'cat_ghost2': pygame.image.load('gfx/cat_g2.png'),
          'cursor': pygame.image.load('gfx/cursor.png'),
          'dummy': pygame.image.load('gfx/dummy.png'),
          }
@@ -142,6 +143,7 @@ class Game:
         self.running = False
         self.editmode = False
         self.ghostmode = False
+        self.gameover = False
 
         self.font = BitmapFont('gfx/heimatfont.png')
 
@@ -276,6 +278,14 @@ class Game:
         OBSTACLES = OBSTACLES_AS_GHOST
         PUSHABLES = PUSHABLES_AS_GHOST
 
+    def enterNormalMode(self):
+        self.ghostmode = False
+        self.player.sprite_id = 'cat'
+
+        global OBSTACLES, PUSHABLES
+        OBSTACLES = OBSTACLES_AS_CAT
+        PUSHABLES = PUSHABLES_AS_CAT
+
     ###
 
     def controls(self):
@@ -308,6 +318,15 @@ class Game:
                             self.setTile(self.cursor.xpos, self.cursor.ypos, e.unicode)
                         else:
                             self.setTile(self.cursor.xpos, self.cursor.ypos, " ")
+                    else:
+                        if e.unicode.isnumeric():
+                            self.loadLevel(int(e.unicode))
+                            self.levelno = int(e.unicode)
+                        else:
+                            if e.unicode == "s":
+                                self.saveLevel(self.levelno)
+                                
+
 
 
                 if e.key == pygame.K_LEFT:
@@ -321,6 +340,14 @@ class Game:
 
                 if e.key == pygame.K_DOWN:
                     cur_object.moveDown()
+
+
+                if e.key == pygame.K_SPACE:
+                    if self.gameover:
+                        self.gameover = False
+                        self.loadLevel(self.levelno)
+
+                        self.enterNormalMode()
 
 
                 if e.key == pygame.K_TAB:
@@ -408,19 +435,23 @@ class Game:
                 else:
                     self.player.update()
 
-
-        cur_tile = self.getTile(self.player.xpos, self.player.ypos)
+        cur_x, cur_y = self.player.xpos, self.player.ypos
+        cur_tile = self.getTile(cur_x, cur_y)
 
         if cur_tile == 'e':
             self.enterGhostMode()
 
         elif cur_tile == 'f':
             if not self.ghostmode:
-                self.setTile(self.player.xpos, self.player.ypos, ' ')
+                self.setTile(cur_x, cur_y, ' ')
 
         elif cur_tile == 'g':
             if self.ghostmode:
-                self.setTile(self.player.xpos, self.player.ypos, ' ')
+                self.setTile(cur_x, cur_y, ' ')
+
+        if self.getFloor(cur_x, cur_y) != ' ':
+            if self.ghostmode:
+                self.gameover = True
 
         self.calcLighting()
 
@@ -467,16 +498,24 @@ class Game:
         # draw cat
         self.player.render(self.screen)
 
-        TILES['cat_ghost'].set_alpha(64 + (time.time() * 100) % 128)
+        if self.ghostmode:
+            if flicker:
+                self.player.sprite_id = 'cat_ghost'
+            else:
+                self.player.sprite_id = 'cat_ghost2'
 
-        #self.font.centerText(self.screen, 'CATS HAVE NINE LIVES', y=5)
-        #self.font.centerText(self.screen, 'F11 or ALT+ENTER = FULLSCREEN', y=7)
+
+        # game over
+
+        if self.gameover:
+            self.font.centerText(self.screen, 'GAME OVER', y=10)
+            self.font.centerText(self.screen, 'PRESS SPACE', y=12)
+
 
         # show editmode
         if self.editmode:
-            self.font.drawText(self.screen, 'EDIT MODE ', x=1, y=21)
-            self.font.drawText(self.screen, 'LEVEL ' + str(self.levelno), x=12, y=21)
-            self.font.drawText(self.screen, ' — L.OAD, S.AVE', x=21, y=21)
+            self.font.drawText(self.screen, 'EDIT MODE --- LEVEL ' + str(self.levelno), x=1, y=21)
+            # self.font.drawText(self.screen, '' + str(self.levelno), x=12, y=21)
             self.cursor.render(self.screen)
 
 
@@ -500,9 +539,9 @@ class Game:
 
 game = Game()
 
-game.loadLevel(2)
+game.loadLevel(1)
 game.run()
 
 pygame.quit()
-game.saveLevel(2)
+game.saveLevel(game.levelno)
 
