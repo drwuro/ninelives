@@ -326,10 +326,7 @@ class Game:
     def controls(self):
 
         if self.editmode:
-            if flicker:
-                    cur_object = self.cursor
-                else:
-                    cur_object = self.cursor2
+            cur_object = self.cursor
         else:
             cur_object = self.player
 
