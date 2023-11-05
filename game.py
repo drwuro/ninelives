@@ -156,6 +156,7 @@ class Game:
         self.titlescreen = True
 
         self.font = BitmapFont('gfx/heimatfont.png')
+        self.bigfont = BitmapFont('gfx/heimatfont.png', zoom=2)
 
         self.levelno = 1
 
@@ -645,7 +646,7 @@ class Game:
 
             self.screen.blit(TILES['cat'], (SCR_W / 2 - TW / 2, SCR_H / 2 - TH / 2))
 
-            self.font.centerText(self.screen, '*** NINE LIVES ***', y=4)
+            self.bigfont.centerText(self.screen, 'NINE LIVES', y=3)
             self.font.centerText(self.screen, 'A BODENSEE GAMEJAM 2023 GAME BY', y=14)
             self.font.centerText(self.screen, 'MSMR, ROSOBE, ZEHA', y=16)
 
