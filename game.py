@@ -62,6 +62,7 @@ TILES = {'#': pygame.image.load('gfx/wall.png'),
          'cat_ghost': pygame.image.load('gfx/cat_g.png'),
          'cat_ghost2': pygame.image.load('gfx/cat_g2.png'),
          'cursor': pygame.image.load('gfx/cursor.png'),
+         'cursor2': pygame.image.load('gfx/cursor2.png'),
          'saving': pygame.image.load('gfx/areyousure.png'),
          'dummy': pygame.image.load('gfx/dummy.png'),
          }
@@ -325,7 +326,10 @@ class Game:
     def controls(self):
 
         if self.editmode:
-            cur_object = self.cursor
+            if flicker:
+                    cur_object = self.cursor
+                else:
+                    cur_object = self.cursor2
         else:
             cur_object = self.player
 
@@ -425,7 +429,7 @@ class Game:
                     self.editmode = not self.editmode
                 #if e.unicode == "s":
                 #    if e.key == pygame.K_TAB: 
-                #        self.saving = not self.saving
+                #r        self.saving = not self.saving
 
             if e.type == pygame.KEYUP:
                 if e.key == pygame.K_LEFT:
