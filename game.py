@@ -153,6 +153,7 @@ class Game:
         self.gameover = False
         self.levelcomplete = False
         self.gamecomplete = False
+        self.titlescreen = True
 
         self.font = BitmapFont('gfx/heimatfont.png')
 
@@ -391,6 +392,10 @@ class Game:
 
                     elif self.gamecomplete:
                         self.gamecomplete = False
+                        self.titlescreen = True
+
+                    elif self.titlescreen:
+                        self.titlescreen = False
                         self.levelno = 1
                         self.loadLevel(self.levelno)
                         self.enterNormalMode()
@@ -631,6 +636,15 @@ class Game:
             self.font.centerText(self.screen, 'YOU WON THE GAME!', y=6)
             self.font.centerText(self.screen, 'PRESS SPACE TO RESTART', y=16)
 
+        if self.titlescreen:
+            self.screen.fill((0,0,0))
+
+            self.screen.blit(TILES['cat'], (SCR_W / 2 - TW / 2, SCR_H / 2 - TH / 2))
+
+            self.font.centerText(self.screen, '*** NINE LIVES ***', y=4)
+            self.font.centerText(self.screen, 'A BODENSEE GAMEJAM 2023 GAME BY', y=14)
+            self.font.centerText(self.screen, 'MSMR, ROSOBE, ZEHA', y=16)
+
 
         # show editmode
         if self.editmode:
@@ -653,7 +667,7 @@ class Game:
             self.render()
             self.controls()
 
-            if not self.gamecomplete and not self.levelcomplete and not self.gameover:
+            if not self.gamecomplete and not self.levelcomplete and not self.gameover and not self.titlescreen:
                 self.update()
 
             clock.tick(60)
