@@ -52,9 +52,10 @@ TILES = {'#': pygame.image.load('gfx/wall.png'),
          'v2': pygame.image.load('gfx/Taschenlampe_v2.png'),
          'u2': pygame.image.load('gfx/Taschenlampe_u2.png'),
          'w2': pygame.image.load('gfx/Taschenlampe_w2.png'),
-         'e': pygame.image.load('gfx/enemy_1.png'),
          '-': pygame.image.load('gfx/floor_g.png'),
 
+         'enemy': pygame.image.load('gfx/enemy_1.png'),
+         'enemy2': pygame.image.load('gfx/enemy_2.png'),
          'cat': pygame.image.load('gfx/cat.png'),
          'cat_ghost': pygame.image.load('gfx/cat_g.png'),
          'cat_ghost2': pygame.image.load('gfx/cat_g2.png'),
@@ -64,6 +65,7 @@ TILES = {'#': pygame.image.load('gfx/wall.png'),
 
 OBSTACLES_AS_CAT = ['#', '+']
 OBSTACLES_AS_GHOST = ['+']
+OBSTACLES_AS_ENEMY = ['#', '+', 'b']
 
 PUSHABLES_AS_CAT = ['b']
 PUSHABLES_AS_GHOST = []
@@ -73,6 +75,7 @@ PUSHABLES = PUSHABLES_AS_CAT
 
 FLOORS = [' ', 'i', 'j']
 LIGHT_BLOCKERS = ['#', '+', 'b']
+DO_NOT_RENDER = ['e', 'c', ' ']
 
 
 class Object:
@@ -82,6 +85,7 @@ class Object:
         self.ypos = ypos
         self.xdir = 0
         self.ydir = 0
+        self.speed = 8      # how many frames until next step
 
         self.movedelay = 0
 
@@ -122,7 +126,7 @@ class Object:
 
     def update(self):
         if self.xdir != 0 or self.ydir != 0:
-            self.movedelay = 8
+            self.movedelay = self.speed
 
         self.xpos += self.xdir
         self.ypos += self.ydir
@@ -150,6 +154,7 @@ class Game:
         self.levelno = 1
 
         self.player = Object('cat')
+        self.enemies = []
 
         # editmode
         self.cursor = Object('cursor')
@@ -168,14 +173,20 @@ class Game:
 
         self.level = lines
 
-        # find player start pos
-
+        # find player start pos and create enemies
+        self.enemies = []
         for y, line in enumerate(self.level):
             for x, tile in enumerate(line):
                 if tile == 'c':
                     self.player.xpos = x
                     self.player.ypos = y
-                    self.setTile(x, y, ' ')
+                    #self.setTile(x, y, ' ')
+
+                if tile == 'e':
+                    enemy = Object('enemy', x, y)
+                    enemy.speed = 32
+                    self.enemies.append(enemy)
+                    #self.setTile(x, y, ' ')
 
         self.floor = [' ' * LEV_W] * LEV_H
 
@@ -278,6 +289,8 @@ class Game:
         OBSTACLES = OBSTACLES_AS_GHOST
         PUSHABLES = PUSHABLES_AS_GHOST
 
+        self.enemies = []
+
     def enterNormalMode(self):
         self.ghostmode = False
         self.player.sprite_id = 'cat'
@@ -325,7 +338,7 @@ class Game:
                         else:
                             if e.unicode == "s":
                                 self.saveLevel(self.levelno)
-                                
+
 
 
 
@@ -382,66 +395,61 @@ class Game:
 
         # update cat
 
-        if not self.player.mayMove():
-            return
+        if self.player.mayMove():
+            tileLeft = self.getTile(self.player.xpos -1, self.player.ypos)
+            tileRight = self.getTile(self.player.xpos +1, self.player.ypos)
+            tileUp = self.getTile(self.player.xpos, self.player.ypos -1)
+            tileDown = self.getTile(self.player.xpos, self.player.ypos +1)
 
-        tileLeft = self.getTile(self.player.xpos -1, self.player.ypos)
-        tileRight = self.getTile(self.player.xpos +1, self.player.ypos)
-        tileUp = self.getTile(self.player.xpos, self.player.ypos -1)
-        tileDown = self.getTile(self.player.xpos, self.player.ypos +1)
+            tileLeft2 = self.getTile(self.player.xpos -2, self.player.ypos)
+            tileRight2 = self.getTile(self.player.xpos +2, self.player.ypos)
+            tileUp2 = self.getTile(self.player.xpos, self.player.ypos -2)
+            tileDown2 = self.getTile(self.player.xpos, self.player.ypos +2)
 
-        tileLeft2 = self.getTile(self.player.xpos -2, self.player.ypos)
-        tileRight2 = self.getTile(self.player.xpos +2, self.player.ypos)
-        tileUp2 = self.getTile(self.player.xpos, self.player.ypos -2)
-        tileDown2 = self.getTile(self.player.xpos, self.player.ypos +2)
-
-        if self.player.xdir == -1:
-            if tileLeft not in OBSTACLES:
-                if tileLeft in PUSHABLES:
-                    if tileLeft2 in FLOORS:
-                        self.setTile(self.player.xpos -2, self.player.ypos, tileLeft)
-                        self.setTile(self.player.xpos -1, self.player.ypos, ' ')
+            if self.player.xdir == -1:
+                if tileLeft not in OBSTACLES:
+                    if tileLeft in PUSHABLES:
+                        if tileLeft2 in FLOORS:
+                            self.setTile(self.player.xpos -2, self.player.ypos, tileLeft)
+                            self.setTile(self.player.xpos -1, self.player.ypos, ' ')
+                            self.player.update()
+                    else:
                         self.player.update()
-                else:
-                    self.player.update()
 
-        if self.player.xdir == 1:
-            if tileRight not in OBSTACLES:
-                if tileRight in PUSHABLES:
-                    if tileRight2 in FLOORS:
-                        self.setTile(self.player.xpos +2, self.player.ypos, tileRight)
-                        self.setTile(self.player.xpos +1, self.player.ypos, ' ')
+            if self.player.xdir == 1:
+                if tileRight not in OBSTACLES:
+                    if tileRight in PUSHABLES:
+                        if tileRight2 in FLOORS:
+                            self.setTile(self.player.xpos +2, self.player.ypos, tileRight)
+                            self.setTile(self.player.xpos +1, self.player.ypos, ' ')
+                            self.player.update()
+                    else:
                         self.player.update()
-                else:
-                    self.player.update()
 
-        if self.player.ydir == -1:
-            if tileUp not in OBSTACLES:
-                if tileUp in PUSHABLES:
-                    if tileUp2 in FLOORS:
-                        self.setTile(self.player.xpos, self.player.ypos -2, tileUp)
-                        self.setTile(self.player.xpos, self.player.ypos -1, ' ')
+            if self.player.ydir == -1:
+                if tileUp not in OBSTACLES:
+                    if tileUp in PUSHABLES:
+                        if tileUp2 in FLOORS:
+                            self.setTile(self.player.xpos, self.player.ypos -2, tileUp)
+                            self.setTile(self.player.xpos, self.player.ypos -1, ' ')
+                            self.player.update()
+                    else:
                         self.player.update()
-                else:
-                    self.player.update()
 
-        if self.player.ydir == 1:
-            if tileDown not in OBSTACLES:
-                if tileDown in PUSHABLES:
-                    if tileDown2 in FLOORS:
-                        self.setTile(self.player.xpos, self.player.ypos +2, tileDown)
-                        self.setTile(self.player.xpos, self.player.ypos +1, ' ')
+            if self.player.ydir == 1:
+                if tileDown not in OBSTACLES:
+                    if tileDown in PUSHABLES:
+                        if tileDown2 in FLOORS:
+                            self.setTile(self.player.xpos, self.player.ypos +2, tileDown)
+                            self.setTile(self.player.xpos, self.player.ypos +1, ' ')
+                            self.player.update()
+                    else:
                         self.player.update()
-                else:
-                    self.player.update()
 
         cur_x, cur_y = self.player.xpos, self.player.ypos
         cur_tile = self.getTile(cur_x, cur_y)
 
-        if cur_tile == 'e':
-            self.enterGhostMode()
-
-        elif cur_tile == 'f':
+        if cur_tile == 'f':
             if not self.ghostmode:
                 self.setTile(cur_x, cur_y, ' ')
 
@@ -453,7 +461,53 @@ class Game:
             if self.ghostmode:
                 self.gameover = True
 
+
+        # update lighting
+
         self.calcLighting()
+
+
+        # update enemies
+
+        for enemy in self.enemies:
+            if self.player.xpos < enemy.xpos:
+                enemy.xdir = -1
+            elif self.player.xpos > enemy.xpos:
+                enemy.xdir = 1
+            else:
+                enemy.xdir = 0
+
+            if self.player.ypos < enemy.ypos:
+                enemy.ydir = -1
+            elif self.player.ypos > enemy.ypos:
+                enemy.ydir = 1
+            else:
+                enemy.ydir = 0
+
+            tileLeft = self.getTile(enemy.xpos -1, enemy.ypos)
+            tileRight = self.getTile(enemy.xpos +1, enemy.ypos)
+            tileUp = self.getTile(enemy.xpos, enemy.ypos -1)
+            tileDown = self.getTile(enemy.xpos, enemy.ypos +1)
+
+            if enemy.xdir == -1 and tileLeft in OBSTACLES_AS_ENEMY:
+                enemy.xdir = 0
+            if enemy.xdir == 1 and tileRight in OBSTACLES_AS_ENEMY:
+                enemy.xdir = 0
+            if enemy.ydir == -1 and tileUp in OBSTACLES_AS_ENEMY:
+                enemy.ydir = 0
+            if enemy.ydir == 1 and tileDown in OBSTACLES_AS_ENEMY:
+                enemy.ydir = 0
+
+            # avoid diagonal movement
+            if enemy.xdir != 0 and enemy.ydir != 0:
+                enemy.xdir = 0
+
+            if enemy.mayMove():
+                enemy.update()
+
+            if enemy.xpos == self.player.xpos and enemy.ypos == self.player.ypos:
+                self.enterGhostMode()
+                break
 
 
     def render(self):
@@ -475,8 +529,8 @@ class Game:
                 self.screen.blit(TILES[floortile], (x * TW, y * TH))
 
                 # draw actual tile
-                if tile in TILES:
-                    if tile != ' ':
+                if tile in TILES or tile in DO_NOT_RENDER:
+                    if tile not in DO_NOT_RENDER:
                         if tile == 'k':
                             if flicker:
                                 tile += 'd'
@@ -495,6 +549,17 @@ class Game:
                 else:
                     self.screen.blit(TILES['dummy'], (x * TW, y * TH))
 
+
+        # draw enemies
+        for enemy in self.enemies:
+            enemy.render(self.screen)
+
+            if (time.time() * 1000) % 250 < 125:
+                enemy.sprite_id = 'enemy2'
+            else:
+                enemy.sprite_id = 'enemy'
+
+
         # draw cat
         self.player.render(self.screen)
 
@@ -506,7 +571,6 @@ class Game:
 
 
         # game over
-
         if self.gameover:
             self.font.centerText(self.screen, 'GAME OVER', y=10)
             self.font.centerText(self.screen, 'PRESS SPACE', y=12)
