@@ -425,7 +425,7 @@ class Game:
                 if e.key == pygame.K_TAB:
                     self.editmode = not self.editmode
                 #if e.unicode == "s":
-                #    if e.key == pygame.K_TAB: 
+                #    if e.key == pygame.K_TAB:
                 #r        self.saving = not self.saving
 
             if e.type == pygame.KEYUP:
@@ -449,6 +449,10 @@ class Game:
                 return
 
     def update(self):
+        # update lighting
+
+        self.calcLighting()
+
         # update cursor (editmode)
 
         if self.editmode:
@@ -545,11 +549,6 @@ class Game:
 
         if self.fishcount == 0:
             self.levelcomplete = True
-
-
-        # update lighting
-
-        self.calcLighting()
 
 
         # update enemies
@@ -702,7 +701,7 @@ class Game:
             self.cursor.render(self.screen)
         if self.editmode and self.saving:
             self.font.drawText(self.screen, 'SAVE LEVEL ' + str(self.levelno) + '?  [S] no  /  [ENTER] OK ', x=1, y=21)
-            
+
 
 
 
